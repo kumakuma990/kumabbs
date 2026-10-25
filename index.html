@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -159,10 +158,24 @@ HTML
       margin-bottom: 10px;
     }
 
+    .post-author-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .post-author {
       font-weight: bold;
       font-size: 0.95rem;
       color: var(--text-color);
+    }
+
+    .post-userid {
+      font-size: 0.75rem;
+      color: var(--sub-text-color);
+      background-color: var(--bg-color);
+      padding: 2px 6px;
+      border-radius: 4px;
     }
 
     .post-date {
@@ -232,7 +245,7 @@ HTML
 
   <div class="container">
     <header>
-      <h1>🌸 みんなの掲示板 🌸</h1>
+      <h1>(⋈◍＞◡＜◍)。✧♡ みんなの掲示板°˖✧</h1>
       <p>自由に書き込んでね！</p>
     </header>
 
@@ -240,7 +253,8 @@ HTML
     <div class="post-form">
       <div class="form-group">
         <label for="username">お名前</label>
-        <input type="text" id="username" placeholder="名無しさん" maxlength="20">
+        <!-- 最初から「名無しさん」が入るように value を追加 -->
+        <input type="text" id="username" value="名無しさん" placeholder="名無しさん" maxlength="20">
       </div>
       <div class="form-group">
         <label for="content">メッセージ</label>
@@ -261,6 +275,13 @@ HTML
   </div>
 
   <script>
+    // ブラウザごとの固有IDを自動生成（まだなければ作る）
+    let myUserId = localStorage.getItem('my_bbs_userid');
+    if (!myUserId) {
+      myUserId = Math.random().toString(36).substring(2, 8); // 6文字のランダムID
+      localStorage.setItem('my_bbs_userid', myUserId);
+    }
+
     // ローカルストレージから投稿データを取得
     let posts = JSON.parse(localStorage.getItem('my_bbs_posts')) || [];
 
@@ -288,14 +309,16 @@ HTML
         username: username,
         content: content,
         date: dateString,
+        userId: myUserId, // 自動で作ったIDを持たせる
         likes: 0
       };
 
       posts.unshift(newPost); // 新しい投稿を先頭に追加
       saveAndRender();
 
-      // フォームをクリア
+      // フォームをクリア（名前は「名無しさん」に戻す）
       contentInput.value = '';
+      usernameInput.value = '名無しさん';
     }
 
     // いいねを増やす関数
@@ -330,7 +353,8 @@ HTML
 
       const filteredPosts = posts.filter(post => 
         post.username.toLowerCase().includes(filterText.toLowerCase()) ||
-        post.content.toLowerCase().includes(filterText.toLowerCase())
+        post.content.toLowerCase().includes(filterText.toLowerCase()) ||
+        (post.userId && post.userId.toLowerCase().includes(filterText.toLowerCase()))
       );
 
       if (filteredPosts.length === 0) {
@@ -341,9 +365,15 @@ HTML
       filteredPosts.forEach(post => {
         const postCard = document.createElement('div');
         postCard.className = 'post-card';
+        // IDが古いデータに無い場合の対策として、なければ「----」にする
+        const displayUserId = post.userId ? post.userId : '----';
+
         postCard.innerHTML = `
           <div class="post-header">
-            <span class="post-author">${escapeHtml(post.username)}</span>
+            <div class="post-author-area">
+              <span class="post-author">${escapeHtml(post.username)}</span>
+              <span class="post-userid">ID:${displayUserId}</span>
+            </div>
             <span class="post-date">${post.date}</span>
           </div>
           <div class="post-content">${escapeHtml(post.content)}</div>
@@ -365,7 +395,7 @@ HTML
     }
 
     // 文字列のエスケープ処理（セキュリティ対策）
-    function escapeHtml(str) {
+    let escapeHtml = (str) => {
       return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
