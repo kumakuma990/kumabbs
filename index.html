@@ -568,13 +568,14 @@ for (const adminId of adminIds) {
     doc(db, "admins", adminId)
   );
 
-  if (
-    adminDoc.exists() &&
-    adminDoc.data().uid === user.uid
-  ) {
-    isAdmin = true;
-    break;
-  }
+if (
+  adminDoc.exists() &&
+  adminDoc.data().uid === user.uid
+) {
+  isAdmin = true;
+  console.log("管理人として認識されたよ！");
+  break;
+}
 }
 } catch (error) {
   console.error(error);
