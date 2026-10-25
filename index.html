@@ -566,6 +566,7 @@ try {
   isAdmin =
     adminDoc.exists() &&
     adminDoc.data().uid === user.uid;
+  console.log("管理人チェック", adminDoc.exists(), isAdmin);
 } catch (error) {
   console.error(error);
   isAdmin = false;
