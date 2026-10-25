@@ -560,14 +560,22 @@ currentUser = user;
           console.log("管理人登録用UID:", user.uid);
 
 try {
+const adminIds = ["admin", "pc"];
+isAdmin = false;
+
+for (const adminId of adminIds) {
   const adminDoc = await getDoc(
-    doc(db, "admins", "admin")
+    doc(db, "admins", adminId)
   );
 
-  isAdmin =
+  if (
     adminDoc.exists() &&
-    adminDoc.data().uid === user.uid;
-  console.log("管理人チェック", adminDoc.exists(), isAdmin);
+    adminDoc.data().uid === user.uid
+  ) {
+    isAdmin = true;
+    break;
+  }
+}
 } catch (error) {
   console.error(error);
   isAdmin = false;
