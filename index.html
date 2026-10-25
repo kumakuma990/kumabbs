@@ -304,19 +304,20 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      query,
-      orderBy,
-      onSnapshot,
-      updateDoc,
-      deleteDoc,
-      doc,
-      increment,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+  increment,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBYQ5-8eknVbvYUgbVUGyNZFepdxri6X0Q",
@@ -340,6 +341,7 @@ import {
     const statusMessage = document.getElementById("statusMessage");
 
     let currentUser = null;
+    let isAdmin = false;
     let posts = [];
     let busyLikes = new Set();
     let busyDeletes = new Set();
@@ -409,7 +411,8 @@ import {
         card.className = "post-card";
 
         const canDelete =
-          currentUser && post.ownerUid === currentUser.uid;
+  !!currentUser &&
+  (isAdmin || post.ownerUid === currentUser.uid);
 
         card.innerHTML = `
           <div class="post-header">
@@ -554,10 +557,22 @@ import {
       }
 
 currentUser = user;
-setStatus("管理人登録用UID: " + user.uid);
-submitBtn.disabled = false;
-submitBtn.textContent = "投稿する";   
 
+try {
+  const adminDoc = await getDoc(
+    doc(db, "admins", "admin")
+  );
+
+  isAdmin =
+    adminDoc.exists() &&
+    adminDoc.data().uid === user.uid;
+} catch (error) {
+  console.error(error);
+  isAdmin = false;
+}
+
+submitBtn.disabled = false;
+submitBtn.textContent = "投稿する";
       const postsQuery = query(
         postsCollection,
         orderBy("createdAt", "desc")
