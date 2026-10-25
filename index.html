@@ -553,9 +553,10 @@ import {
         return;
       }
 
-      currentUser = user;
-      submitBtn.disabled = false;
-      submitBtn.textContent = "投稿する";
+currentUser = user;
+setStatus("管理人登録用UID: " + user.uid);
+submitBtn.disabled = false;
+submitBtn.textContent = "投稿する";   
 
       const postsQuery = query(
         postsCollection,
