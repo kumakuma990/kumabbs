@@ -517,10 +517,14 @@ import {
     async function deletePost(id) {
       const post = posts.find(item => item.id === id);
 
-      if (!post || !currentUser || post.ownerUid !== currentUser.uid) {
-        alert("自分の投稿だけ削除できるよ。");
-        return;
-      }
+if (
+  !post ||
+  !currentUser ||
+  (!isAdmin && post.ownerUid !== currentUser.uid)
+) {
+  alert("自分の投稿だけ削除できるよ。");
+  return;
+}
 
       if (!confirm("この投稿を削除してもいい？")) return;
 
