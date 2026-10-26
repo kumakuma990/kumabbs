@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopBBS - みんなの雑談ひろば</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            mint: '#E6F9F3',
+                            mintDark: '#2EC4B6',
+                            pink: '#FFE5EC',
+                            pinkDark: '#FF4D6D',
+                            yellow: '#FFF3B0',
+                            yellowDark: '#FFB703',
+                            blue: '#E0F2FE',
+                            blueDark: '#0284C7',
+                            purple: '#F3E8FF',
+                            purpleDark: '#9333EA',
+                            bg: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Nunito"', '"M PLUS Rounded 1c"', 'sans-serif'],
+                        aa: ['"MS PGothic"', '"ＭＳ Ｐゴシック"', '"IPAMonaGothic"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F8FAFC;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            color: #334155;
+        }
+
+        /* AA (アスキーアート) 表示用の設定 */
+        .post-body-aa {
+            font-family: "MS PGothic", "ＭＳ Ｐゴシック", "IPAMonaGothic", "Mona", monospace;
+            font-size: 15px;
+            line-height: 1.2;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* アンカーリンクの装飾 */
+        .anchor-link {
+            color: #0284C7;
+            background-color: #E0F2FE;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .anchor-link:hover {
+            background-color: #0284C7;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* ポップな影の効果 */
+        .pop-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(51, 65, 85, 0.15);
+        }
+
+        .pop-shadow-sm {
+            box-shadow: 2px 2px 0px 0px rgba(51, 65, 85, 0.1);
+        }
+
+        .pop-button {
+            box-shadow: 0px 4px 0px 0px rgba(0, 0, 0, 0.15);
+            transition: all 0.15s ease;
+        }
+
+        .pop-button:active {
+            transform: translateY(2px);
+            box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.15);
+        }
+
+        /* レスホバーポップアップ */
+        #preview-popup {
+            position: absolute;
+            display: none;
+            background-color: #ffffff;
+            border: 3px solid #38BDF8;
+            border-radius: 1rem;
+            padding: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* スクロールバーのカスタマイズ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-8">
+
+    <!-- ヘッダーエリア -->
+    <header class="bg-white border-b-4 border-pastel-mintDark sticky top-0 z-40 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="showThreadList()">
+                <div class="w-10 h-10 rounded-2xl bg-pastel-mintDark flex items-center justify-center text-white text-xl font-black pop-shadow-sm">
+                    💬
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold text-slate-800 tracking-wide flex items-center gap-2">
+                        PopBBS
+                        <span class="text-xs bg-pastel-pink text-pastel-pinkDark font-bold px-2 py-0.5 rounded-full">雑談ひろば</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">みんなで楽しくおしゃべりしよう！</p>
+                </div>
+            </div>
+            
+            <button onclick="scrollToThreadForm()" class="bg-pastel-pinkDark text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-2xl pop-button hover:opacity-90 flex items-center gap-1">
+                <span>✨</span> スレッドを建てる
+            </button>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="max-w-4xl mx-auto w-full px-4 pt-6 flex-grow">
+        
+        <!-- View 1: スレッド一覧画面 -->
+        <section id="view-thread-list" class="space-y-6">
+            
+            <!-- バナー / 歓迎カード -->
+            <div class="bg-gradient-to-r from-pastel-mint to-pastel-blue p-5 rounded-3xl border-2 border-slate-200 pop-shadow relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-base font-bold text-slate-800 mb-1 flex items-center gap-2">
+                        <span>👋</span> PopBBSへようこそ！
+                    </h2>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        ポップなコミュニティ掲示板です。アンカー（>>1）、sage機能、ID表示に対応！みんなでマナーを守って楽しく使ってね🌸
+                    </p>
+                </div>
+                <div class="absolute -right-4 -bottom-6 text-6xl opacity-20 select-none">🎉</div>
+            </div>
+
+            <!-- スレッド一覧 -->
+            <div class="bg-white rounded-3xl border-2 border-slate-200 p-5 pop-shadow">
+                <div class="flex items-center justify-between pb-3 mb-4 border-b-2 border-slate-100">
+                    <h2 class="font-extrabold text-slate-800 text-base flex items-center gap-2">
+                        <span class="text-lg">📌</span> スレッド一覧
+                    </h2>
+                    <span class="text-xs bg-slate-100 font-bold text-slate-600 px-3 py-1 rounded-full">
+                        全 <span id="thread-count" class="text-pastel-mintDark font-black">0</span> 件
+                    </span>
+                </div>
+
+                <div id="thread-list-container" class="space-y-3">
+                    <!-- JavaScriptで動的生成 -->
+                </div>
+            </div>
+
+            <!-- 新規スレッド作成フォーム -->
+            <div id="new-thread-form-card" class="bg-white rounded-3xl border-2 border-pastel-purpleDark/30 p-5 pop-shadow bg-gradient-to-b from-white to-pastel-purple/20">
+                <h2 class="font-extrabold text-base mb-4 text-purple-900 flex items-center gap-2">
+                    <span>📝</span> 新しいスレッドをつくる
+                </h2>
+                <form id="new-thread-form" class="space-y-4 text-sm">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 text-xs">スレッドタイトル <span class="text-rose-500">*</span></label>
+                        <input type="text" id="thread-title-input" required class="w-full bg-white border-2 border-slate-200 rounded-2xl p-3 text-slate-800 focus:outline-none focus:border-pastel-purpleDark transition-colors" placeholder="例: おすすめのコンビニスイーツを語ろう！">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 text-xs">お名前 (任意)</label>
+                            <input type="text" id="thread-name-input" class="w-full bg-white border-2 border-slate-200 rounded-2xl p-2.5 text-slate-800 focus:outline-none focus:border-pastel-purpleDark transition-colors" placeholder="名無しさん" value="名無しさん">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 text-xs">最初の投稿本文 <span class="text-rose-500">*</span></label>
+                        <textarea id="thread-body-input" required rows="4" class="w-full bg-white border-2 border-slate-200 rounded-2xl p-3 text-slate-800 focus:outline-none focus:border-pastel-purpleDark transition-colors post-body-aa" placeholder="ここにスレッドの本文を入力してね！アスキーアート(AA)もきれいに表示されるよ。"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-pastel-purpleDark text-white font-extrabold py-3.5 px-6 rounded-2xl pop-button hover:opacity-90 flex items-center justify-center gap-2">
+                        <span>🚀</span> スレッドを作成する
+                    </button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- View 2: スレッド詳細（レス一覧・投稿）画面 -->
+        <section id="view-thread-detail" class="hidden space-y-5">
+            
+            <!-- 戻るボタン & スレッドヘッダー -->
+            <div class="space-y-3">
+                <button onclick="showThreadList()" class="bg-white border-2 border-slate-200 hover:border-slate-300 font-bold text-xs text-slate-600 px-4 py-2 rounded-2xl pop-shadow-sm flex items-center gap-1.5 transition-all">
+                    <span>👈</span> スレッド一覧に戻る
+                </button>
+
+                <div class="bg-white rounded-3xl border-2 border-pastel-mintDark p-5 pop-shadow bg-gradient-to-r from-white via-pastel-mint/30 to-white">
+                    <h2 id="current-thread-title" class="text-xl font-extrabold text-slate-800 leading-snug"></h2>
+                    <div class="mt-2 flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span id="current-thread-res-count" class="bg-pastel-mintDark text-white font-bold px-2.5 py-0.5 rounded-full"></span>
+                        <span id="current-thread-updated" class="text-slate-400"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- レス投稿表示エリア -->
+            <div id="posts-container" class="space-y-3.5">
+                <!-- JavaScriptで動的生成 -->
+            </div>
+
+            <!-- レス書き込みフォーム -->
+            <div id="reply-form-card" class="bg-white rounded-3xl border-2 border-pastel-blueDark/30 p-5 pop-shadow mt-8 bg-gradient-to-b from-white to-pastel-blue/20">
+                <h3 class="font-extrabold text-base mb-3 text-sky-900 flex items-center gap-2">
+                    <span>💬</span> コメントを書き込む
+                </h3>
+                <form id="reply-form" class="space-y-3 text-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 text-xs">お名前</label>
+                            <input type="text" id="reply-name-input" class="w-full bg-white border-2 border-slate-200 rounded-2xl p-2.5 text-slate-800 focus:outline-none focus:border-pastel-blueDark transition-colors" placeholder="名無しさん" value="名無しさん">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1 text-xs">E-mail <span class="text-slate-400 font-normal">(「sage」でスレ非age)</span></label>
+                            <input type="text" id="reply-email-input" class="w-full bg-white border-2 border-slate-200 rounded-2xl p-2.5 text-slate-800 focus:outline-none focus:border-pastel-blueDark transition-colors" placeholder="sage">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1 text-xs">内容 <span class="text-rose-500">*</span></label>
+                        <textarea id="reply-body-input" required rows="3" class="w-full bg-white border-2 border-slate-200 rounded-2xl p-3 text-slate-800 focus:outline-none focus:border-pastel-blueDark transition-colors post-body-aa" placeholder="書き込み内容を入力... (例: >>1 わかる！それ美味しいよね！)"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 pt-1">
+                        <button type="submit" class="bg-pastel-blueDark text-white font-extrabold px-6 py-3 rounded-2xl pop-button hover:opacity-90 flex items-center gap-2">
+                            <span>✨</span> 書き込む
+                        </button>
+                        <span class="text-[11px] text-slate-400 font-medium">※ >>1 のように入力するとアンカーが張れるよ</span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ナビゲーション（下部） -->
+            <div class="flex justify-between items-center pt-2 text-xs">
+                <button onclick="showThreadList()" class="text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1">
+                    👈 スレッド一覧に戻る
+                </button>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1">
+                    ☝️ ページ上部へ
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="max-w-4xl mx-auto w-full text-center text-xs text-slate-400 pt-8 mt-auto">
+        <p class="font-medium">PopBBS - Bright & Cute Community</p>
+    </footer>
+
+    <!-- レスアンカーホバー時のプレビューポップアップ -->
+    <div id="preview-popup"></div>
+
+    <!-- アプリケーションロジック -->
+    <script>
+        
+
+        // ユーザー用カラフルアバターカラーリスト
+        const AVATAR_COLORS = [
+            'bg-pastel-pink text-pastel-pinkDark',
+            'bg-pastel-mint text-pastel-mintDark',
+            'bg-pastel-yellow text-pastel-yellowDark',
+            'bg-pastel-blue text-pastel-blueDark',
+            'bg-pastel-purple text-pastel-purpleDark'
+        ];
+
+        // --- グローバル状態 ---
+        let threads = [];
+        let currentThreadId = null;
+
+        // --- 起動時初期化 ---
+        window.addEventListener('DOMContentLoaded', () => {
+            loadThreads();
+            showThreadList();
+
+            // フォームのイベントリスナー設定
+            document.getElementById('new-thread-form').addEventListener('submit', handleCreateThread);
+            document.getElementById('reply-form').addEventListener('submit', handleCreateReply);
+        });
+
+        // --- ストレージ処理 ---
+        function loadThreads() {
+            const data = localStorage.getItem('pop_bbs_threads');
+            if (data) {
+                try {
+                    threads = JSON.parse(data);
+                } catch (e) {
+                    console.error("Failed to parse threads data from localStorage", e);
+                    threads = SAMPLE_THREADS;
+                    saveThreads();
+                }
+            } else {
+                threads = SAMPLE_THREADS;
+                saveThreads();
+            }
+        }
+
+        function saveThreads() {
+            localStorage.setItem('pop_bbs_threads', JSON.stringify(threads));
+        }
+
+        // --- ユーティリティ ---
+        function formatDate(d) {
+            const date = new Date(d);
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+            const dayOfWeek = days[date.getDay()];
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${month}/${day}(${dayOfWeek}) ${hours}:${minutes}`;
+        }
+
+        // ユーザーID生成
+        function generateUserId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let res = '';
+            for (let i = 0; i < 8; i++) {
+                res += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return res;
+        }
+
+        // セッションごとにユーザーIDを保持
+        let myUserId = sessionStorage.getItem('pop_bbs_user_id');
+        if (!myUserId) {
+            myUserId = generateUserId();
+            sessionStorage.setItem('pop_bbs_user_id', myUserId);
+        }
+
+        // エスケープ処理（XSS防止）
+        function escapeHTML(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // 本文中の >>1 などのアンカーをリンク化
+        function parseBody(text) {
+            const escaped = escapeHTML(text);
+            return escaped.replace(/(&gt;&gt;(\d+))/g, (match, p1, p2) => {
+                return `<a class="anchor-link" data-target-no="${p2}" onclick="jumpToPost(${p2})" onmouseenter="showAnchorPreview(event, ${p2})" onmouseleave="hideAnchorPreview()">>>${p2}</a>`;
+            });
+        }
+
+        // IDに基づく色決定（固定カラー割り当て）
+        function getAvatarColor(idStr) {
+            let hash = 0;
+            for (let i = 0; i < idStr.length; i++) {
+                hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % AVATAR_COLORS.length;
+            return AVATAR_COLORS[index];
+        }
+
+        // --- 画面切り替え ---
+        function showThreadList() {
+            currentThreadId = null;
+            document.getElementById('view-thread-list').classList.remove('hidden');
+            document.getElementById('view-thread-detail').classList.add('hidden');
+            renderThreadList();
+            window.scrollTo({top: 0});
+        }
+
+        function showThreadDetail(threadId) {
+            currentThreadId = threadId;
+            document.getElementById('view-thread-list').classList.add('hidden');
+            document.getElementById('view-thread-detail').classList.remove('hidden');
+            renderThreadDetail();
+            window.scrollTo({top: 0});
+        }
+
+        function scrollToThreadForm() {
+            showThreadList();
+            setTimeout(() => {
+                document.getElementById('new-thread-form-card').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // --- レンダリング処理 ---
+
+        // スレッド一覧の描画
+        function renderThreadList() {
+            const container = document.getElementById('thread-list-container');
+            const countEl = document.getElementById('thread-count');
+            
+            // 更新日時（降順）でソート
+            const sortedThreads = [...threads].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+            
+            countEl.textContent = sortedThreads.length;
+            container.innerHTML = '';
+
+            if (sortedThreads.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 font-medium">まだスレッドがありません。最初のスレッドを立ててみよう！</div>`;
+                return;
+            }
+
+            sortedThreads.forEach((th) => {
+                const firstPost = th.posts[0] || {};
+                const card = document.createElement('div');
+                card.className = 'p-4 rounded-2xl bg-slate-50 border-2 border-slate-100 hover:border-pastel-mintDark/50 hover:bg-white transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+                card.onclick = () => showThreadDetail(th.id);
+
+                card.innerHTML = `
+                    <div class="space-y-1.5 flex-1">
+                        <h3 class="font-extrabold text-slate-800 text-base group-hover:text-pastel-mintDark transition-colors leading-snug">
+                            ${escapeHTML(th.title)}
+                        </h3>
+                        <p class="text-xs text-slate-500 line-clamp-1 post-body-aa">
+                            1: ${escapeHTML(firstPost.name || '名無しさん')} - ${escapeHTML(firstPost.body || '')}
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+                        <span class="bg-pastel-pink text-pastel-pinkDark font-extrabold text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                            💬 ${th.posts.length}
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-medium">
+                            ${formatDate(th.updatedAt)}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // スレッド詳細（レス一覧）の描画
+        function renderThreadDetail() {
+            const thread = threads.find(t => t.id === currentThreadId);
+            if (!thread) {
+                showThreadList();
+                return;
+            }
+
+            document.getElementById('current-thread-title').textContent = thread.title;
+            document.getElementById('current-thread-res-count').textContent = `${thread.posts.length} コメント`;
+            document.getElementById('current-thread-updated').textContent = `更新: ${formatDate(thread.updatedAt)}`;
+
+            const postsContainer = document.getElementById('posts-container');
+            postsContainer.innerHTML = '';
+
+            thread.posts.forEach((post) => {
+                const postEl = document.createElement('div');
+                postEl.id = `post-${post.no}`;
+                postEl.className = 'bg-white rounded-3xl border-2 border-slate-200 p-4 sm:p-5 pop-shadow transition-all duration-300';
+
+                // ユーザーアバター用のイニシャル
+                const initial = post.name ? post.name.charAt(0) : '名';
+                const avatarColorClass = getAvatarColor(post.userId || 'anon');
+
+                // メール（sage等）のバッジ表示
+                const sageBadge = post.email && post.email.toLowerCase() === 'sage' 
+                    ? `<span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">sage</span>`
+                    : '';
+
+                postEl.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <!-- アバターアイコン -->
+                        <div class="w-9 h-9 rounded-2xl ${avatarColorClass} font-black text-sm flex items-center justify-center shrink-0 pop-shadow-sm">
+                            ${escapeHTML(initial)}
+                        </div>
+
+                        <!-- 投稿ヘッダー＆コンテンツ -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-xs">
+                                <span class="font-extrabold text-slate-800 bg-slate-100 px-2 py-0.5 rounded-lg">#${post.no}</span>
+                                <span class="font-bold text-slate-700">${escapeHTML(post.name)}</span>
+                                ${sageBadge}
+                                <span class="text-slate-400 font-medium ml-auto sm:ml-0">${post.date}</span>
+                                <span class="text-slate-400 font-mono text-[11px] bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200">ID:${escapeHTML(post.userId)}</span>
+                            </div>
+
+                            <div class="post-body-aa text-slate-800 leading-relaxed pt-1 text-sm">${parseBody(post.body)}</div>
+                        </div>
+                    </div>
+                `;
+                postsContainer.appendChild(postEl);
+            });
+        }
+
+        // --- アクション処理 ---
+
+        // スレッド新規作成
+        function handleCreateThread(e) {
+            e.preventDefault();
+
+            const titleInput = document.getElementById('thread-title-input');
+            const nameInput = document.getElementById('thread-name-input');
+            const bodyInput = document.getElementById('thread-body-input');
+
+            const title = titleInput.value.trim();
+            const name = nameInput.value.trim() || '名無しさん';
+            const body = bodyInput.value.trim();
+
+            if (!title || !body) return;
+
+            const now = new Date();
+            const newThread = {
+                id: 'thread_' + Date.now(),
+                title: title,
+                updatedAt: now.toISOString(),
+                posts: [
+                    {
+                        no: 1,
+                        name: name,
+                        email: '',
+                        date: formatDate(now),
+                        userId: myUserId,
+                        body: body
+                    }
+                ]
+            };
+
+            threads.push(newThread);
+            saveThreads();
+
+            // フォームクリア
+            titleInput.value = '';
+            bodyInput.value = '';
+            nameInput.value = '名無しさん';
+
+            // 作成したスレッドへ移動
+            showThreadDetail(newThread.id);
+        }
+
+        // レス投稿
+        function handleCreateReply(e) {
+            e.preventDefault();
+
+            if (!currentThreadId) return;
+
+            const thread = threads.find(t => t.id === currentThreadId);
+            if (!thread) return;
+
+            const nameInput = document.getElementById('reply-name-input');
+            const emailInput = document.getElementById('reply-email-input');
+            const bodyInput = document.getElementById('reply-body-input');
+
+            const name = nameInput.value.trim() || '名無しさん';
+            const email = emailInput.value.trim();
+            const body = bodyInput.value.trim();
+
+            if (!body) return;
+
+            const now = new Date();
+            const nextNo = thread.posts.length + 1;
+
+            const newPost = {
+                no: nextNo,
+                name: name,
+                email: email,
+                date: formatDate(now),
+                userId: myUserId,
+                body: body
+            };
+
+            thread.posts.push(newPost);
+
+            // sageでなければスレッドの更新日時を更新(age)
+            if (email.toLowerCase() !== 'sage') {
+                thread.updatedAt = now.toISOString();
+            }
+
+            saveThreads();
+
+            // フォームクリア
+            bodyInput.value = '';
+
+            // 再描画して最新レスへスクロール
+            renderThreadDetail();
+            setTimeout(() => {
+                const lastPostEl = document.getElementById(`post-${nextNo}`);
+                if (lastPostEl) {
+                    lastPostEl.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 50);
+        }
+
+        // アンカー表示ジャンプ
+        function jumpToPost(postNo) {
+            const targetEl = document.getElementById(`post-${postNo}`);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+                // 強調ハイライトアニメーション
+                targetEl.classList.add('ring-4', 'ring-pastel-mintDark', 'bg-pastel-mint/30');
+                setTimeout(() => {
+                    targetEl.classList.remove('ring-4', 'ring-pastel-mintDark', 'bg-pastel-mint/30');
+                }, 1800);
+            }
+        }
+
+        // アンカーのホバープレビュー
+        function showAnchorPreview(e, postNo) {
+            if (!currentThreadId) return;
+            const thread = threads.find(t => t.id === currentThreadId);
+            if (!thread) return;
+
+            const targetPost = thread.posts.find(p => p.no === postNo);
+            const popup = document.getElementById('preview-popup');
+
+            if (targetPost) {
+                popup.innerHTML = `
+                    <div class="flex items-center gap-2 mb-1.5 text-xs">
+                        <span class="font-extrabold text-slate-800 bg-slate-100 px-2 py-0.5 rounded-lg">#${targetPost.no}</span>
+                        <span class="font-bold text-slate-700">${escapeHTML(targetPost.name)}</span>
+                        <span class="text-slate-400 font-medium ml-auto">${targetPost.date}</span>
+                    </div>
+                    <div class="post-body-aa text-xs text-slate-800 leading-relaxed">${parseBody(targetPost.body)}</div>
+                `;
+            } else {
+                popup.innerHTML = `<span class="text-xs text-rose-500 font-bold">>>${postNo} の書き込みは見つかりませんでした</span>`;
+            }
+
+            popup.style.display = 'block';
+            
+            // ポップアップ位置の設定（画面端での食い込み防止）
+            const popupWidth = 320;
+            let left = e.pageX + 12;
+            if (left + popupWidth > window.innerWidth) {
+                left = e.pageX - popupWidth - 12;
+            }
+
+            popup.style.left = `${left}px`;
+            popup.style.top = `${e.pageY + 12}px`;
+        }
+
+        function hideAnchorPreview() {
+            const popup = document.getElementById('preview-popup');
+            popup.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
