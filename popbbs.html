@@ -220,12 +220,20 @@
                     <span>👈</span> スレッド一覧に戻る
                 </button>
 
-                <div class="bg-white rounded-3xl border-2 border-pastel-mintDark p-5 pop-shadow bg-gradient-to-r from-white via-pastel-mint/30 to-white">
-                    <h2 id="current-thread-title" class="text-xl font-extrabold text-slate-800 leading-snug"></h2>
-                    <div class="mt-2 flex items-center gap-3 text-xs text-slate-500 font-medium">
-                        <span id="current-thread-res-count" class="bg-pastel-mintDark text-white font-bold px-2.5 py-0.5 rounded-full"></span>
-                        <span id="current-thread-updated" class="text-slate-400"></span>
-                    </div>
+
+<div class="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 font-medium">
+    <span id="current-thread-res-count" class="bg-pastel-mintDark text-white font-bold px-2.5 py-0.5 rounded-full"></span>
+    <span id="current-thread-updated" class="text-slate-400"></span>
+    <button
+        id="delete-thread-button"
+        type="button"
+        style="display: none;"
+        class="bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold px-3 py-1.5 rounded-xl transition-all"
+    >
+        🗑️ スレッドを削除
+    </button>
+</div>
+
                 </div>
             </div>
 
