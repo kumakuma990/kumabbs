@@ -474,6 +474,18 @@
             document.getElementById('current-thread-title').textContent = thread.title;
             document.getElementById('current-thread-res-count').textContent = `${thread.posts.length} コメント`;
             document.getElementById('current-thread-updated').textContent = `更新: ${formatDate(thread.updatedAt)}`;
+            const deleteButton = document.getElementById('delete-thread-button');
+if (deleteButton) {
+    deleteButton.style.display = thread.ownerId === myUserId ? 'inline-block' : 'none';
+    deleteButton.onclick = () => {
+        if (!confirm('このスレッドを削除しますか？')) return;
+
+        threads = threads.filter(t => t.id !== currentThreadId);
+        saveThreads();
+        currentThreadId = null;
+        showThreadList();
+    };
+}
 
             const postsContainer = document.getElementById('posts-container');
             postsContainer.innerHTML = '';
