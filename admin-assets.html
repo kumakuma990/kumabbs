@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>くまくま｜素材管理</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      font-family: sans-serif;
+      color: #69445a;
+      background: #fff0f6;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #d85c98;
+    }
+    .notice {
+      padding: 12px;
+      border: 1px solid #f2c6dc;
+      border-radius: 12px;
+      background: white;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .item {
+      padding: 16px;
+      text-align: center;
+      background: white;
+      border: 1px solid #f2c6dc;
+      border-radius: 14px;
+    }
+    .placeholder {
+      display: grid;
+      min-height: 110px;
+      place-items: center;
+      color: #c17ba1;
+      background: #fff7fb;
+      border-radius: 10px;
+    }
+    .item p {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🐰 くまくま素材管理 🎀</h1>
+    <p class="notice">
+      うさぎ素材の管理ページだよ。
+      ここに画像を追加していこうね！
+    </p>
+
+    <section class="gallery" aria-label="素材一覧">
+      <article class="item">
+        <div class="placeholder">画像を追加予定</div>
+        <p>通常</p>
+      </article>
+      <article class="item">
+        <div class="placeholder">画像を追加予定</div>
+        <p>手を振る</p>
+      </article>
+      <article class="item">
+        <div class="placeholder">画像を追加予定</div>
+        <p>ハート</p>
+      </article>
+      <article class="item">
+        <div class="placeholder">画像を追加予定</div>
+        <p>おやすみ</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
