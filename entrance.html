@@ -39,32 +39,35 @@
       box-shadow: 0 7px 0 #F6DDE7;
     }
 .title-area {
+  position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 14px;
+  align-items: center;
   margin-bottom: 24px;
 }
 
 .title-bunny {
-  width: 82px;
+  position: absolute;
+  right: 0;
+  width: 72px;
   height: 82px;
   object-fit: contain;
 }
 
 .title-text {
   min-width: 0;
+  text-align: center;
 }
 
 .title-text h1 {
   font-size: 20px;
   letter-spacing: 1px;
-  text-align: left;
+  text-align: center;
 }
 
 .title-text .subtitle {
   font-size: 11px;
-  text-align: left;
+  text-align: center;
   margin: 4px 0 0;
 }
     h1 {
@@ -193,11 +196,11 @@
 
     <section class="card">
 <div class="title-area">
-  <img src="images/usagi/base.png" alt="うさぎちゃん" class="title-bunny">
   <div class="title-text">
     <h1>♡ あてんしょん ♡</h1>
     <p class="subtitle">簡単なアンケートのお願い♡</p>
   </div>
+  <img src="images/usagi/base.png" alt="うさぎちゃん" class="title-bunny">
 </div>
 
       <form id="entry-form">
