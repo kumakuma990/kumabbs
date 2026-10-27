@@ -3,30 +3,25 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>♡ あてんしょん ♡</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       padding: 24px 14px 40px;
       background: #FFF0F5;
       color: #8D536B;
-      font-family: "Hiragino Maru Gothic ProN", "Yu Gothic",
-                   Meiryo, sans-serif;
+      font-family: "Yu Gothic", Meiryo, sans-serif;
       line-height: 1.8;
     }
 
-    button, select {
-      font: inherit;
-    }
+    button, select { font: inherit; }
 
     .page {
       max-width: 560px;
-      margin: 0 auto;
+      margin: auto;
     }
 
     .decoration {
@@ -37,7 +32,7 @@
     }
 
     .card {
-      background: #FFFFFF;
+      background: #FFF;
       border: 2px solid #F5D5E2;
       border-radius: 22px;
       padding: 26px 20px;
@@ -58,7 +53,7 @@
       color: #B77B94;
     }
 
-    .mascot-placeholder {
+    .mascot {
       width: 100px;
       height: 100px;
       margin: 0 auto 14px;
@@ -73,9 +68,7 @@
       text-align: center;
     }
 
-    .question {
-      margin: 22px 0;
-    }
+    .question { margin: 22px 0; }
 
     .question-title {
       display: block;
@@ -91,7 +84,6 @@
       border-radius: 12px;
       background: #FFF8FB;
       color: #8D536B;
-      outline-color: #D987A8;
     }
 
     .choices {
@@ -106,10 +98,9 @@
       padding: 9px 12px;
       border: 1px solid #EBC5D5;
       border-radius: 14px;
-      background: #FFFFFF;
+      background: #FFF;
       color: #A65F7D;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
     }
 
     .choice[aria-pressed="true"] {
@@ -127,28 +118,20 @@
       text-align: center;
     }
 
-    .rule p {
-      margin: 0 0 12px;
-      font-weight: bold;
-    }
+    .rule p { margin: 0 0 12px; font-weight: bold; }
 
-    .enter-button {
-      display: block;
+    .enter {
       width: 100%;
       margin-top: 24px;
       padding: 13px;
       border: none;
       border-radius: 999px;
       background: #E99BB9;
-      color: #FFFFFF;
+      color: #FFF;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 4px 0 #D77FA1;
-    }
-
-    .enter-button:hover {
-      background: #E38EAF;
     }
 
     .message {
@@ -160,9 +143,7 @@
       text-align: center;
     }
 
-    .message h2 {
-      color: #D77FA1;
-    }
+    .message h2 { color: #D77FA1; }
 
     .footer {
       text-align: center;
@@ -172,30 +153,18 @@
     }
 
     @media (max-width: 380px) {
-      .card {
-        padding: 22px 14px;
-      }
-
-      h1 {
-        font-size: 26px;
-      }
-
-      .choice {
-        min-width: 75px;
-        padding: 8px;
-      }
+      .card { padding: 22px 14px; }
+      h1 { font-size: 26px; }
+      .choice { min-width: 75px; padding: 8px; }
     }
   </style>
 </head>
-
 <body>
   <main class="page">
     <div class="decoration">♡ ✧ ♡ ✧ ♡</div>
 
-    <section class="card" id="entrance">
-      <div class="mascot-placeholder" aria-label="うさぎ画像の予定地">
-        うさぎちゃん<br>あとで追加♡
-      </div>
+    <section class="card">
+      <div class="mascot">うさぎちゃん<br>あとで追加♡</div>
 
       <h1>♡ あてんしょん ♡</h1>
       <p class="subtitle">簡単なアンケートのお願い♡</p>
@@ -207,33 +176,26 @@
           </label>
           <select id="birth-year" required>
             <option value="">選んでね♡</option>
-            <option value="before1970">1960年代以前</option>
+            <option value="old">1960年代以前</option>
           </select>
         </div>
 
         <div class="question">
           <span class="question-title">✧ 性別は？</span>
-          <div class="choices" id="gender-choices">
-            <button class="choice" type="button" data-group="gender"
-              data-value="女の子" aria-pressed="false">女の子</button>
-            <button class="choice" type="button" data-group="gender"
-              data-value="男の子" aria-pressed="false">男の子</button>
-            <button class="choice" type="button" data-group="gender"
-              data-value="その他" aria-pressed="false">その他</button>
-            <button class="choice" type="button" data-group="gender"
-              data-value="答えない" aria-pressed="false">答えない</button>
+          <div class="choices">
+            <button class="choice" type="button" data-g="g" data-v="1" aria-pressed="false">女の子</button>
+            <button class="choice" type="button" data-g="g" data-v="2" aria-pressed="false">男の子</button>
+            <button class="choice" type="button" data-g="g" data-v="3" aria-pressed="false">その他</button>
+            <button class="choice" type="button" data-g="g" data-v="4" aria-pressed="false">答えない</button>
           </div>
         </div>
 
         <div class="question">
           <span class="question-title">✧ 犬派？猫派？</span>
           <div class="choices">
-            <button class="choice" type="button" data-group="pet"
-              data-value="dog" aria-pressed="false">🐶 犬派</button>
-            <button class="choice" type="button" data-group="pet"
-              data-value="cat" aria-pressed="false">🐱 猫派</button>
-            <button class="choice" type="button" data-group="pet"
-              data-value="both" aria-pressed="false">♡ どっちも好き</button>
+            <button class="choice" type="button" data-g="p" data-v="1" aria-pressed="false">🐶 犬派</button>
+            <button class="choice" type="button" data-g="p" data-v="2" aria-pressed="false">🐱 猫派</button>
+            <button class="choice" type="button" data-g="p" data-v="3" aria-pressed="false">♡ どっちも好き</button>
           </div>
         </div>
 
@@ -242,95 +204,78 @@
           <div class="rule">
             <p>荒らし・迷惑行為は禁止だょ！</p>
             <div class="choices">
-              <button class="choice" type="button" data-group="rules"
-                data-value="yes" aria-pressed="false">💗 はーい！</button>
-              <button class="choice" type="button" data-group="rules"
-                data-value="no" aria-pressed="false">同意しない</button>
+              <button class="choice" type="button" data-g="r" data-v="1" aria-pressed="false">💗 はーい！</button>
+              <button class="choice" type="button" data-g="r" data-v="0" aria-pressed="false">同意しない</button>
             </div>
           </div>
         </div>
 
-        <button class="enter-button" type="submit">♡ すすむ ♡</button>
+        <button class="enter" type="submit">♡ すすむ ♡</button>
       </form>
 
       <div class="message" id="message" role="status" aria-live="polite">
         <h2>ごめんね 🥺</h2>
         <p>おやくそくに同意したら入室できるよ。</p>
-        <button class="choice" id="back-button" type="button">
-          もどる
-        </button>
+        <button class="choice" id="back" type="button">もどる</button>
       </div>
     </section>
 
-    <div class="footer">
-      ♡ かわいい時間をすごしてね ♡
-    </div>
+    <div class="footer">♡ かわいい時間をすごしてね ♡</div>
   </main>
 
   <script>
-    const yearSelect = document.getElementById("birth-year");
-    const currentYear = new Date().getFullYear();
+    const y = document.getElementById("birth-year");
+    const n = new Date().getFullYear();
 
-    for (let year = currentYear; year >= 1970; year--) {
-      const option = document.createElement("option");
-      option.value = String(year);
-      option.textContent = year + "年";
-      yearSelect.appendChild(option);
+    for (let i = n; i >= 1970; i--) {
+      const o = document.createElement("option");
+      o.value = String(i);
+      o.textContent = i + "年";
+      y.appendChild(o);
     }
 
-    const answers = {
-      gender: null,
-      pet: null,
-      rules: null
-    };
+    const a = { g: null, p: null, r: null };
 
-    document.querySelectorAll("[data-group]").forEach(button => {
-      button.addEventListener("click", () => {
-        const group = button.dataset.group;
-        answers[group] = button.dataset.value;
+    document.querySelectorAll("[data-g]").forEach(b => {
+      b.addEventListener("click", () => {
+        const k = b.dataset.g;
+        a[k] = b.dataset.v;
 
-        document.querySelectorAll(
-          '[data-group="' + group + '"]'
-        ).forEach(item => {
-          item.setAttribute(
-            "aria-pressed",
-            item === button ? "true" : "false"
-          );
+        document.querySelectorAll('[data-g="' + k + '"]').forEach(c => {
+          c.setAttribute("aria-pressed", c === b ? "true" : "false");
         });
       });
     });
 
-    const form = document.getElementById("entry-form");
-    const message = document.getElementById("message");
-    const entrance = document.getElementById("entrance");
+    const f = document.getElementById("entry-form");
+    const m = document.getElementById("message");
 
-    form.addEventListener("submit", event => {
-      event.preventDefault();
+    f.addEventListener("submit", e => {
+      e.preventDefault();
 
-      if (!yearSelect.value) {
+      if (!y.value) {
         alert("生まれ年を選んでね♡");
-        yearSelect.focus();
+        y.focus();
         return;
       }
 
-      if (answers.rules === "no") {
-        form.style.display = "none";
-        message.style.display = "block";
+      if (a.r === "0") {
+        f.style.display = "none";
+        m.style.display = "block";
         return;
       }
 
-      if (answers.rules !== "yes") {
+      if (a.r !== "1") {
         alert("おやくそくを選んでね♡");
         return;
       }
 
-      const selectedYear = yearSelect.value;
+      const v = y.value;
 
-      // 生まれ年だけで行き先を決める
-      if (selectedYear !== "before1970") {
-        const year = Number(selectedYear);
+      if (v !== "old") {
+        const z = Number(v);
 
-        if (year >= 1990 && year <= 1999) {
+        if (z >= 1990 && z <= 1999) {
           window.location.href = "index.html";
           return;
         }
@@ -339,15 +284,16 @@
       window.location.href = "popbbs.html";
     });
 
-    document.getElementById("back-button").addEventListener("click", () => {
-      message.style.display = "none";
-      form.style.display = "block";
-      answers.rules = null;
+    document.getElementById("back").addEventListener("click", () => {
+      m.style.display = "none";
+      f.style.display = "block";
+      a.r = null;
 
-      document.querySelectorAll('[data-group="rules"]').forEach(button => {
-        button.setAttribute("aria-pressed", "false");
+      document.querySelectorAll('[data-g="r"]').forEach(b => {
+        b.setAttribute("aria-pressed", "false");
       });
     });
   </script>
 </body>
 </html>
+
