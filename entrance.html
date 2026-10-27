@@ -48,7 +48,7 @@
 
 .title-bunny {
   position: absolute;
-  right: 80px;
+  right: 95px;
   width: 64px;
   height: 74px;
   object-fit: contain;
@@ -250,7 +250,7 @@
       <div class="message" id="message" role="status" aria-live="polite">
         <h2>Bye-bye！</h2>
         <p>遊びに来てくれてありがとう！</p>
-        <button class="choice" id="back" type="button">とじる</button>
+        <button class="choice" id="back" type="button">サイトを出る</button>
       </div>
     </section>
 
@@ -319,14 +319,17 @@
     });
 
     document.getElementById("back").addEventListener("click", () => {
-      m.style.display = "none";
-      f.style.display = "block";
-      a.r = null;
-
-      document.querySelectorAll('[data-g="r"]').forEach(b => {
-        b.setAttribute("aria-pressed", "false");
-      });
-    });
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    m.innerHTML = `
+      <h2>Bye-bye！</h2>
+      <p>遊びに来てくれてありがとう！</p>
+      <p>このページはボタンから閉じられないことがあるよ。
+      ブラウザのタブを閉じてね♡</p>
+    `;
+  }
+});
   </script>
 </body>
 </html>
