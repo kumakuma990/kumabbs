@@ -38,7 +38,35 @@
       padding: 26px 20px;
       box-shadow: 0 7px 0 #F6DDE7;
     }
+.title-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
 
+.title-bunny {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+}
+
+.title-text {
+  min-width: 0;
+}
+
+.title-text h1 {
+  font-size: 20px;
+  letter-spacing: 1px;
+  text-align: left;
+}
+
+.title-text .subtitle {
+  font-size: 11px;
+  text-align: left;
+  margin: 4px 0 0;
+}
     h1 {
       margin: 0;
       text-align: center;
@@ -164,10 +192,13 @@
     <div class="decoration">♡ ✧ ♡ ✧ ♡</div>
 
     <section class="card">
-      <div class="mascot">うさぎちゃん<br>あとで追加♡</div>
-
-      <h1>♡ あてんしょん ♡</h1>
-      <p class="subtitle">簡単なアンケートのお願い♡</p>
+<div class="title-area">
+  <img src="images/usagi/base.png" alt="うさぎちゃん" class="title-bunny">
+  <div class="title-text">
+    <h1>♡ あてんしょん ♡</h1>
+    <p class="subtitle">簡単なアンケートのお願い♡</p>
+  </div>
+</div>
 
       <form id="entry-form">
         <div class="question">
