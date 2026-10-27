@@ -5,323 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>みんなの掲示板</title>
   <style>
-    :root {
-      --bg-color: #fff0f5;
-      --card-bg: #ffffff;
-      --primary-color: #ffb6c1;
-      --primary-hover: #ff9aa2;
-      --text-color: #4a3525;
-      --sub-text-color: #8c7365;
-      --border-color: #fce4ec;
-      --like-color: #ff6b81;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Helvetica Neue', Arial,
-        'Hiragino Kaku Gothic ProN', 'Hiragino Sans',
-        Meiryo, sans-serif;
-    background-color: var(--bg-color);
-background-image: url("images/usagi/back.png");
-      color: var(--text-color);
-      line-height: 1.6;
-      padding: 20px 10px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      margin-bottom: 5px;
-    }
-
-    header p {
-      color: var(--sub-text-color);
-      font-size: 0.9rem;
-    }
-
-    .post-form {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(74, 53, 37, 0.05);
-      margin-bottom: 25px;
-      border: 2px solid var(--border-color);
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 0.95rem;
-      color: var(--text-color);
-      outline: none;
-      background: #fafafa;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: var(--primary-color);
-      background: #fff;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .submit-btn {
-      width: 100%;
-      background: var(--primary-color);
-      color: #fff;
-      border: none;
-      padding: 12px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .submit-btn:hover {
-      background: var(--primary-hover);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .search-box {
-      margin-bottom: 20px;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 10px 15px;
-      border: 1.5px solid var(--border-color);
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: var(--text-color);
-      outline: none;
-      background: var(--card-bg);
-    }
-
-    .post-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .post-card {
-      background: var(--card-bg);
-      padding: 18px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(74, 53, 37, 0.04);
-      border: 1px solid var(--border-color);
-      position: relative;
-    }
-
-    .post-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .post-author-area {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .post-author {
-      font-weight: bold;
-      font-size: 0.95rem;
-    }
-
-    .post-userid {
-      font-size: 0.75rem;
-      color: var(--sub-text-color);
-      background: var(--bg-color);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    .post-date {
-      font-size: 0.75rem;
-      color: var(--sub-text-color);
-    }
-
-    .post-content {
-      font-size: 0.95rem;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      margin-bottom: 15px;
-    }
-
-    .post-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--border-color);
-      padding-top: 10px;
-    }
-
-    .like-btn,
-    .delete-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    .like-btn {
-      color: var(--like-color);
-      font-size: 0.9rem;
-      font-weight: bold;
-    }
-
-    .like-btn:hover {
-      background: #fff0f5;
-    }
-
-    .like-btn:disabled {
-      opacity: 0.5;
-      cursor: wait;
-    }
-
-    .delete-btn {
-      color: var(--sub-text-color);
-      font-size: 0.8rem;
-    }
-
-    .delete-btn:hover {
-      color: #e53935;
-      background: #ffebee;
-    }
-
-    .empty-message {
-      text-align: center;
-      color: var(--sub-text-color);
-      padding: 30px;
-      font-size: 0.9rem;
-    }
-
-    .status-message {
-      text-align: center;
-      color: var(--sub-text-color);
-      font-size: 0.85rem;
-      margin: 0 0 15px;
-      overflow-wrap: anywhere;
-    }
+    :root{--bg-color:#fff0f5;--card-bg:#fff;--primary-color:#ffb6c1;--primary-hover:#ff9aa2;--text-color:#4a3525;--sub-text-color:#8c7365;--border-color:#fce4ec}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans',Meiryo,sans-serif;background-color:var(--bg-color);background-image:url("images/usagi/back.png");color:var(--text-color);line-height:1.6;padding:20px 10px}
+    .container{max-width:650px;margin:0 auto}
+    header{text-align:center;margin-bottom:20px}
+    header h1{font-size:1.65rem;margin-bottom:5px}
+    header p{color:var(--sub-text-color);font-size:.9rem}
+    .panel{background:var(--card-bg);padding:18px;border-radius:16px;box-shadow:0 4px 15px rgba(74,53,37,.05);margin-bottom:20px;border:2px solid var(--border-color)}
+    .form-group{margin-bottom:13px}
+    label{display:block;font-size:.85rem;font-weight:bold;margin-bottom:5px}
+    input,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border-color);border-radius:10px;font-size:.95rem;color:var(--text-color);outline:none;background:#fffafb;font-family:inherit}
+    input:focus,textarea:focus{border-color:var(--primary-color);background:#fff}
+    textarea{resize:vertical;min-height:100px}
+    .primary-btn,.secondary-btn,.danger-btn{border:0;border-radius:10px;padding:10px 14px;font-size:.95rem;font-weight:bold;cursor:pointer;font-family:inherit}
+    .primary-btn{width:100%;background:var(--primary-color);color:#fff}
+    .primary-btn:hover{background:var(--primary-hover)}
+    .primary-btn:disabled{opacity:.6;cursor:not-allowed}
+    .secondary-btn{background:#fff0f5;color:#a64d65;border:1px solid #f7d2dc}
+    .danger-btn{background:#fff0f0;color:#b44b55;font-size:.8rem;padding:5px 9px}
+    .search-box{margin-bottom:16px}
+    .status-message{text-align:center;color:var(--sub-text-color);font-size:.85rem;margin:0 0 15px;overflow-wrap:anywhere}
+    .thread-list{display:flex;flex-direction:column;gap:12px}
+    .thread-card{background:#fff;padding:16px;border-radius:15px;border:1px solid var(--border-color);box-shadow:0 4px 15px rgba(74,53,37,.04)}
+    .thread-open{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text-color);font:inherit;cursor:pointer}
+    .thread-title{font-weight:bold;font-size:1.05rem;overflow-wrap:anywhere;margin-bottom:7px}
+    .thread-meta{font-size:.75rem;color:var(--sub-text-color);display:flex;flex-wrap:wrap;gap:8px}
+    .thread-preview{font-size:.88rem;color:#765f53;margin-top:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+    .thread-actions{display:flex;justify-content:flex-end;margin-top:10px}
+    .empty-message{text-align:center;color:var(--sub-text-color);padding:28px 12px;font-size:.9rem;background:#fff;border:1px solid var(--border-color);border-radius:15px}
+    .hidden{display:none!important}
+    .back-btn{margin-bottom:14px}
+    .detail-title{font-size:1.25rem;overflow-wrap:anywhere;margin-bottom:8px}
+    .detail-meta{font-size:.8rem;color:var(--sub-text-color);margin-bottom:14px}
+    .detail-body{white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;background:#fff8fa;border-radius:12px;border:1px solid var(--border-color)}
+    .section-heading{font-size:1rem;margin:18px 0 10px;color:#a64d65}
+    .reply-list{display:flex;flex-direction:column;gap:10px}
+    .reply-card{background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:13px}
+    .reply-meta{font-size:.75rem;color:var(--sub-text-color);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+    .reply-body{white-space:pre-wrap;overflow-wrap:anywhere}
+    .reply-actions{display:flex;justify-content:flex-end;margin-top:8px}
+    .small-note{font-size:.78rem;color:var(--sub-text-color);margin-top:7px}
+    @media(max-width:420px){body{padding:14px 8px}.panel{padding:14px}header h1{font-size:1.4rem}}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>(⋈◍＞◡＜◍)。✧♡ みんなの掲示板°˖✧</h1>
-      <p>自由に書き込んでね！</p>
+      <p>自由に書き込んでね！スレッドを立てておしゃべりしよう♡</p>
     </header>
 
-    <div class="post-form">
-      <div class="form-group">
-        <label for="username">お名前</label>
-        <input
-          type="text"
-          id="username"
-          value="名無しさん"
-          placeholder="名無しさん"
-          maxlength="20"
-        >
-      </div>
+    <main id="listView">
+      <section class="panel">
+        <div class="form-group">
+          <label for="username">お名前</label>
+          <input type="text" id="username" value="名無しさん" placeholder="名無しさん" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="threadTitle">スレッドのタイトル</label>
+          <input type="text" id="threadTitle" placeholder="タイトルを入力してね♡" maxlength="100">
+        </div>
+        <button class="primary-btn" id="createThreadBtn" disabled>接続中...</button>
+        <p class="small-note">タイトルだけでスレッドを立てられるよ！本文やおしゃべりはスレッドを開いてから書いてね。</p>
+      </section>
+      <div class="search-box"><input type="text" id="searchInput" placeholder="スレッドを検索..." aria-label="スレッドを検索"></div>
+      <p class="status-message" id="statusMessage">掲示板に接続しています...</p>
+      <div class="thread-list" id="threadList"></div>
+    </main>
 
-      <div class="form-group">
-        <label for="content">メッセージ</label>
-        <textarea
-          id="content"
-          placeholder="ここにメッセージを入力してね..."
-          rows="3"
-          maxlength="2000"
-        ></textarea>
-      </div>
-
-      <button class="submit-btn" id="submitBtn" disabled>
-        接続中...
-      </button>
-    </div>
-
-    <div class="search-box">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="投稿を検索..."
-      >
-    </div>
-
-    <p class="status-message" id="statusMessage">
-      掲示板に接続しています...
-    </p>
-
-    <div class="post-list" id="postList"></div>
+    <main id="detailView" class="hidden">
+      <button class="secondary-btn back-btn" id="backBtn" type="button">← スレッド一覧へ戻る</button>
+      <section class="panel">
+        <h2 class="detail-title" id="detailTitle"></h2>
+        <p class="detail-meta" id="detailMeta"></p>
+        <div class="detail-body" id="detailBody"></div>
+        <div class="thread-actions" id="threadDeleteArea"></div>
+      </section>
+      <h3 class="section-heading">♡ 返信</h3>
+      <div class="reply-list" id="replyList"></div>
+      <section class="panel" style="margin-top:18px">
+        <h3 class="section-heading" style="margin-top:0">返信を書き込む</h3>
+        <div class="form-group">
+          <label for="replyUsername">お名前</label>
+          <input type="text" id="replyUsername" value="名無しさん" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="replyContent">メッセージ</label>
+          <textarea id="replyContent" rows="4" maxlength="2000" placeholder="返信を入力してね..."></textarea>
+        </div>
+        <button class="primary-btn" id="replyBtn" disabled>返信する</button>
+      </section>
+    </main>
   </div>
 
   <script type="module">
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-
-import {
-  getAuth,
-  signInAnonymously,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  updateDoc,
-  deleteDoc,
-  doc,
-  getDoc,
-  increment,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBYQ5-8eknVbvYUgbVUGyNZFepdxri6X0Q",
+      apiKey: "AIzaSyBYQ5-8ekNvbYUgbVUGyNZFepdxri6X0Q",
       authDomain: "kumakuma-bbs.firebaseapp.com",
       projectId: "kumakuma-bbs",
       storageBucket: "kumakuma-bbs.firebasestorage.app",
@@ -332,279 +116,310 @@ import {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const postsCollection = collection(db, "posts");
+    const threadsCollection = collection(db, "threads");
 
     const usernameInput = document.getElementById("username");
-    const contentInput = document.getElementById("content");
-    const submitBtn = document.getElementById("submitBtn");
+    const threadTitleInput = document.getElementById("threadTitle");
+    const createThreadBtn = document.getElementById("createThreadBtn");
     const searchInput = document.getElementById("searchInput");
-    const postList = document.getElementById("postList");
+    const threadList = document.getElementById("threadList");
     const statusMessage = document.getElementById("statusMessage");
+    const listView = document.getElementById("listView");
+    const detailView = document.getElementById("detailView");
+    const backBtn = document.getElementById("backBtn");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailMeta = document.getElementById("detailMeta");
+    const detailBody = document.getElementById("detailBody");
+    const threadDeleteArea = document.getElementById("threadDeleteArea");
+    const replyList = document.getElementById("replyList");
+    const replyUsername = document.getElementById("replyUsername");
+    const replyContent = document.getElementById("replyContent");
+    const replyBtn = document.getElementById("replyBtn");
 
     let currentUser = null;
     let isAdmin = false;
-    let posts = [];
-    let busyLikes = new Set();
-    let busyDeletes = new Set();
-
+    let threads = [];
+    let activeThread = null;
+    let stopRepliesListener = null;
+    let busyThreadCreates = false;
+    let busyReplyCreate = false;
+    const busyThreadDeletes = new Set();
+    const busyReplyDeletes = new Set();
     let myUserId = localStorage.getItem("my_bbs_userid");
-
     if (!myUserId) {
       myUserId = Math.random().toString(36).slice(2, 8);
       localStorage.setItem("my_bbs_userid", myUserId);
     }
 
     function escapeHtml(value) {
-      return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-      })[char]);
+      return String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char]);
     }
-
     function formatDate(timestamp) {
-      if (!timestamp || typeof timestamp.toDate !== "function") {
-        return "日時を取得中...";
-      }
-
+      if (!timestamp || typeof timestamp.toDate !== "function") return "日時を取得中...";
       const date = timestamp.toDate();
-
-      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${
-        String(date.getHours()).padStart(2, "0")
-      }:${
-        String(date.getMinutes()).padStart(2, "0")
-      }`;
+      return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
     }
+    function setStatus(message) { statusMessage.textContent = message; }
+    function canDelete(item) { return !!currentUser && (isAdmin || item.ownerUid === currentUser.uid); }
 
-    function setStatus(message) {
-      statusMessage.textContent = message;
-    }
-
-    function filterPosts() {
-      renderPosts(searchInput.value);
-    }
-
-    function renderPosts(filterText = "") {
-      postList.replaceChildren();
-
+    function renderThreads(filterText = "") {
+      threadList.replaceChildren();
       const term = filterText.trim().toLowerCase();
-
-      const filteredPosts = posts.filter(post =>
-        String(post.username ?? "").toLowerCase().includes(term) ||
-        String(post.content ?? "").toLowerCase().includes(term) ||
-        String(post.userId ?? "").toLowerCase().includes(term)
+      const filtered = threads.filter(thread =>
+        String(thread.title ?? "").toLowerCase().includes(term) ||
+        String(thread.username ?? "").toLowerCase().includes(term) ||
+        String(thread.userId ?? "").toLowerCase().includes(term)
       );
-
-      if (filteredPosts.length === 0) {
+      if (!filtered.length) {
         const empty = document.createElement("div");
         empty.className = "empty-message";
-        empty.textContent = term
-          ? "検索に一致する投稿がないよ。"
-          : "投稿がまだないよ。最初の投稿をしてみてね！";
-        postList.appendChild(empty);
+        empty.textContent = term ? "検索に一致するスレッドがないよ。" : "スレッドはまだないよ。最初のスレッドを立ててみてね！";
+        threadList.appendChild(empty);
         return;
       }
-
-      for (const post of filteredPosts) {
-        const card = document.createElement("div");
-        card.className = "post-card";
-
-        const canDelete =
-  !!currentUser &&
-  (isAdmin || post.ownerUid === currentUser.uid);
-
-        card.innerHTML = `
-          <div class="post-header">
-            <div class="post-author-area">
-              <span class="post-author">${escapeHtml(post.username)}</span>
-              <span class="post-userid">ID:${escapeHtml(post.userId || "----")}</span>
-            </div>
-            <span class="post-date">${escapeHtml(formatDate(post.createdAt))}</span>
-          </div>
-          <div class="post-content">${escapeHtml(post.content)}</div>
-          <div class="post-footer">
-            <button class="like-btn" type="button">
-              ♥ いいね ${Number(post.likes) || 0}
-            </button>
-            ${
-              canDelete
-                ? '<button class="delete-btn" type="button">削除</button>'
-                : '<span></span>'
-            }
-          </div>
-        `;
-
-        const likeButton = card.querySelector(".like-btn");
-        likeButton.disabled = busyLikes.has(post.id);
-        likeButton.addEventListener("click", () => likePost(post.id));
-
-        if (canDelete) {
-          const deleteButton = card.querySelector(".delete-btn");
-          deleteButton.disabled = busyDeletes.has(post.id);
-          deleteButton.addEventListener("click", () => deletePost(post.id));
+      for (const thread of filtered) {
+        const card = document.createElement("article");
+        card.className = "thread-card";
+        const open = document.createElement("button");
+        open.type = "button";
+        open.className = "thread-open";
+        open.innerHTML = `<div class="thread-title">${escapeHtml(thread.title)}</div><div class="thread-meta"><span>${escapeHtml(thread.username || "名無しさん")}</span><span>ID:${escapeHtml(thread.userId || "----")}</span><span>${escapeHtml(formatDate(thread.createdAt))}</span></div>`;
+        open.addEventListener("click", () => openThread(thread.id));
+        card.appendChild(open);
+        if (canDelete(thread)) {
+          const actions = document.createElement("div");
+          actions.className = "thread-actions";
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "danger-btn";
+          del.textContent = busyThreadDeletes.has(thread.id) ? "削除中..." : "スレッド削除";
+          del.disabled = busyThreadDeletes.has(thread.id);
+          del.addEventListener("click", () => deleteThread(thread.id));
+          actions.appendChild(del);
+          card.appendChild(actions);
         }
-
-        postList.appendChild(card);
+        threadList.appendChild(card);
       }
     }
 
-    async function addPost() {
-      if (!currentUser) {
-        alert("接続中だよ。少し待ってからもう一度試してね！");
-        return;
-      }
-
+    async function createThread() {
+      if (!currentUser) { alert("接続中だよ。少し待ってからもう一度試してね！"); return; }
+      if (busyThreadCreates) return;
+      const title = threadTitleInput.value.trim();
       const username = usernameInput.value.trim() || "名無しさん";
-      const content = contentInput.value.trim();
-
-      if (!content) {
-        alert("メッセージを入力してね！");
-        contentInput.focus();
-        return;
-      }
-
-      if (content.length > 2000) {
-        alert("メッセージは2000文字以内にしてね！");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "投稿中...";
-
+      if (!title) { alert("タイトルを入力してね！"); threadTitleInput.focus(); return; }
+      if (title.length > 100) { alert("タイトルは100文字以内にしてね！"); return; }
+      busyThreadCreates = true;
+      createThreadBtn.disabled = true;
+      createThreadBtn.textContent = "作成中...";
       try {
-        await addDoc(postsCollection, {
-          username: username.slice(0, 20),
-          content,
+        const created = await addDoc(threadsCollection, {
+          title,
+          username: username.slice(0,20),
           userId: myUserId,
           ownerUid: currentUser.uid,
-          likes: 0,
           createdAt: serverTimestamp()
         });
-
-        contentInput.value = "";
+        threadTitleInput.value = "";
         usernameInput.value = "名無しさん";
-        setStatus("投稿できたよ！🩷");
+        setStatus("スレッドを立てたよ！🩷");
+        openThread(created.id);
       } catch (error) {
         console.error(error);
-        alert("投稿できなかったよ。接続やルールの設定を確認してね。");
-        setStatus("投稿に失敗しました。設定を確認してね。");
+        alert("スレッドを作れなかったよ。Firestoreのルールを確認してね。");
+        setStatus("スレッド作成に失敗しました。");
       } finally {
-        submitBtn.disabled = !currentUser;
-        submitBtn.textContent = "投稿する";
+        busyThreadCreates = false;
+        createThreadBtn.disabled = !currentUser;
+        createThreadBtn.textContent = "スレッドを立てる ♡";
       }
     }
 
-    async function likePost(id) {
-      if (!currentUser || busyLikes.has(id)) return;
-
-      busyLikes.add(id);
-      renderPosts(searchInput.value);
-
-      try {
-        await updateDoc(doc(db, "posts", id), {
-          likes: increment(1)
-        });
-      } catch (error) {
-        console.error(error);
-        alert("いいねできなかったよ。もう一度試してね。");
-      } finally {
-        busyLikes.delete(id);
-        renderPosts(searchInput.value);
+    function openThread(threadId) {
+      const thread = threads.find(item => item.id === threadId);
+      if (!thread) { alert("そのスレッドが見つからないよ。一覧を更新してね。"); return; }
+      activeThread = thread;
+      listView.classList.add("hidden");
+      detailView.classList.remove("hidden");
+      detailTitle.textContent = thread.title || "（タイトルなし）";
+      detailMeta.textContent = `${thread.username || "名無しさん"} · ID:${thread.userId || "----"} · ${formatDate(thread.createdAt)}`;
+      detailBody.textContent = "このスレッドに最初の返信をしてみてね！";
+      threadDeleteArea.replaceChildren();
+      if (canDelete(thread)) {
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "danger-btn";
+        del.textContent = "スレッド削除";
+        del.addEventListener("click", () => deleteThread(thread.id));
+        threadDeleteArea.appendChild(del);
       }
+      if (stopRepliesListener) stopRepliesListener();
+      replyList.replaceChildren();
+      const repliesQuery = query(collection(db, "threads", threadId, "replies"), orderBy("createdAt", "asc"));
+      stopRepliesListener = onSnapshot(repliesQuery, snapshot => {
+        renderReplies(snapshot.docs.map(item => ({id:item.id, ...item.data()})));
+      }, error => {
+        console.error(error);
+        replyList.textContent = "返信を読み込めなかったよ。Firestoreのルールを確認してね。";
+      });
     }
 
-    async function deletePost(id) {
-      const post = posts.find(item => item.id === id);
-
-if (
-  !post ||
-  !currentUser ||
-  (!isAdmin && post.ownerUid !== currentUser.uid)
-) {
-  alert("自分の投稿だけ削除できるよ。");
-  return;
-}
-
-      if (!confirm("この投稿を削除してもいい？")) return;
-
-      busyDeletes.add(id);
-      renderPosts(searchInput.value);
-
-      try {
-        await deleteDoc(doc(db, "posts", id));
-      } catch (error) {
-        console.error(error);
-        alert("削除できなかったよ。もう一度試してね。");
-      } finally {
-        busyDeletes.delete(id);
-        renderPosts(searchInput.value);
-      }
-    }
-
-    submitBtn.addEventListener("click", addPost);
-    searchInput.addEventListener("input", filterPosts);
-
-        onAuthStateChanged(auth, async user => {
-      if (!user) {
-        currentUser = null;
-        submitBtn.disabled = true;
-
-        try {
-          await signInAnonymously(auth);
-        } catch (error) {
-          console.error(error);
-          setStatus("接続できません。匿名認証の設定を確認してね。");
-        }
-
+    function renderReplies(replies) {
+      replyList.replaceChildren();
+      if (!replies.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-message";
+        empty.textContent = "返信はまだないよ。最初の返信をしてみてね！";
+        replyList.appendChild(empty);
         return;
       }
+      replies.forEach((reply, index) => {
+        const card = document.createElement("article");
+        card.className = "reply-card";
+        const meta = document.createElement("div");
+        meta.className = "reply-meta";
+        meta.textContent = `>>${index+1} · ${reply.username || "名無しさん"} · ID:${reply.userId || "----"} · ${formatDate(reply.createdAt)}`;
+        const body = document.createElement("div");
+        body.className = "reply-body";
+        body.textContent = reply.content || "";
+        card.append(meta, body);
+        if (canDelete(reply)) {
+          const actions = document.createElement("div");
+          actions.className = "reply-actions";
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "danger-btn";
+          del.textContent = busyReplyDeletes.has(reply.id) ? "削除中..." : "返信削除";
+          del.disabled = busyReplyDeletes.has(reply.id);
+          del.addEventListener("click", () => deleteReply(reply.id));
+          actions.appendChild(del);
+          card.appendChild(actions);
+        }
+        replyList.appendChild(card);
+      });
+    }
 
-currentUser = user;
-          console.log("管理人登録用UID:", user.uid);
+    async function addReply() {
+      if (!currentUser || !activeThread || busyReplyCreate) return;
+      const content = replyContent.value.trim();
+      const username = replyUsername.value.trim() || "名無しさん";
+      if (!content) { alert("メッセージを入力してね！"); replyContent.focus(); return; }
+      if (content.length > 2000) { alert("メッセージは2000文字以内にしてね！"); return; }
+      busyReplyCreate = true;
+      replyBtn.disabled = true;
+      replyBtn.textContent = "返信中...";
+      try {
+        await addDoc(collection(db, "threads", activeThread.id, "replies"), {
+          content,
+          username: username.slice(0,20),
+          userId: myUserId,
+          ownerUid: currentUser.uid,
+          createdAt: serverTimestamp()
+        });
+        replyContent.value = "";
+        replyUsername.value = "名無しさん";
+      } catch (error) {
+        console.error(error);
+        alert("返信できなかったよ。Firestoreのルールを確認してね。");
+      } finally {
+        busyReplyCreate = false;
+        replyBtn.disabled = !currentUser;
+        replyBtn.textContent = "返信する";
+      }
+    }
 
-try {
-const adminIds = ["admin", "pc"];
-isAdmin = false;
+    async function deleteReply(replyId) {
+      if (!currentUser || !activeThread) return;
+      if (!confirm("この返信を削除してもいい？")) return;
+      busyReplyDeletes.add(replyId);
+      try {
+        await deleteDoc(doc(db, "threads", activeThread.id, "replies", replyId));
+      } catch (error) {
+        console.error(error);
+        alert("返信を削除できなかったよ。ルールを確認してね。");
+      } finally {
+        busyReplyDeletes.delete(replyId);
+      }
+    }
 
-for (const adminId of adminIds) {
-  const adminDoc = await getDoc(
-    doc(db, "admins", adminId)
-  );
+    async function deleteThread(threadId) {
+      const thread = threads.find(item => item.id === threadId);
+      if (!thread || !canDelete(thread)) { alert("自分のスレッドか、管理人が削除できるよ。"); return; }
+      if (!confirm("このスレッドを削除してもいい？返信も一緒に削除するよ。")) return;
+      busyThreadDeletes.add(threadId);
+      try {
+        // Firestore does not automatically delete subcollection documents, so delete replies one by one first.
+        const repliesRef = collection(db, "threads", threadId, "replies");
+        const { getDocs } = await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js");
+        const snapshot = await getDocs(repliesRef);
+        for (const replyDoc of snapshot.docs) {
+          await deleteDoc(doc(db, "threads", threadId, "replies", replyDoc.id));
+        }
+        await deleteDoc(doc(db, "threads", threadId));
+        if (activeThread && activeThread.id === threadId) {
+          if (stopRepliesListener) stopRepliesListener();
+          stopRepliesListener = null;
+          activeThread = null;
+          detailView.classList.add("hidden");
+          listView.classList.remove("hidden");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("スレッドを削除できなかったよ。通信やFirestoreのルールを確認してね。");
+      } finally {
+        busyThreadDeletes.delete(threadId);
+        renderThreads(searchInput.value);
+      }
+    }
 
-if (
-  adminDoc.exists() &&
-  adminDoc.data().uid === user.uid
-) {
-  isAdmin = true;
-  console.log("管理人として認識されたよ！");
-  break;
-}
-}
-} catch (error) {
-  console.error(error);
-  isAdmin = false;
-}
+    createThreadBtn.addEventListener("click", createThread);
+    threadTitleInput.addEventListener("keydown", event => { if (event.key === "Enter") createThread(); });
+    searchInput.addEventListener("input", () => renderThreads(searchInput.value));
+    replyBtn.addEventListener("click", addReply);
+    backBtn.addEventListener("click", () => {
+      if (stopRepliesListener) stopRepliesListener();
+      stopRepliesListener = null;
+      activeThread = null;
+      detailView.classList.add("hidden");
+      listView.classList.remove("hidden");
+    });
 
-submitBtn.disabled = false;
-submitBtn.textContent = "投稿する";
-      const postsQuery = query(
-        postsCollection,
-        orderBy("createdAt", "desc")
-      );
-
-      onSnapshot(postsQuery, snapshot => {
-        posts = snapshot.docs.map(item => ({
-          id: item.id,
-          ...item.data()
-        }));
-
-        renderPosts(searchInput.value);
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        currentUser = null;
+        createThreadBtn.disabled = true;
+        replyBtn.disabled = true;
+        try { await signInAnonymously(auth); }
+        catch (error) { console.error(error); setStatus("接続できません。匿名認証の設定を確認してね。"); }
+        return;
+      }
+      currentUser = user;
+      try {
+        isAdmin = false;
+        for (const adminId of ["admin", "pc"]) {
+          const adminDoc = await getDoc(doc(db, "admins", adminId));
+          if (adminDoc.exists() && adminDoc.data().uid === user.uid) { isAdmin = true; break; }
+        }
+      } catch (error) { console.error(error); isAdmin = false; }
+      createThreadBtn.disabled = false;
+      createThreadBtn.textContent = "スレッドを立てる ♡";
+      replyBtn.disabled = false;
+      const threadsQuery = query(threadsCollection, orderBy("createdAt", "desc"));
+      onSnapshot(threadsQuery, snapshot => {
+        threads = snapshot.docs.map(item => ({id:item.id, ...item.data()}));
+        renderThreads(searchInput.value);
+        if (activeThread) {
+          const refreshed = threads.find(item => item.id === activeThread.id);
+          if (refreshed) {
+            activeThread = refreshed;
+            detailTitle.textContent = refreshed.title || "（タイトルなし）";
+            detailMeta.textContent = `${refreshed.username || "名無しさん"} · ID:${refreshed.userId || "----"} · ${formatDate(refreshed.createdAt)}`;
+          }
+        }
         setStatus("みんなの掲示板に接続中だよ！🩷");
       }, error => {
         console.error(error);
-        setStatus("投稿を読み込めません。Firestoreのルールを確認してね。");
+        setStatus("スレッドを読み込めません。Firestoreのルールを確認してね。");
       });
     });
   </script>
