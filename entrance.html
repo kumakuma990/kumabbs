@@ -232,6 +232,15 @@
             <button class="choice" type="button" data-g="g" data-v="4" aria-pressed="false">答えない</button>
           </div>
         </div>
+                <div class="question">
+          <span class="question-title">✧ お子さんはいる？</span>
+          <div class="choices">
+            <button class="choice" type="button" data-g="children" data-v="1" aria-pressed="false">いない！</button>
+            <button class="choice" type="button" data-g="children" data-v="2" aria-pressed="false">いる！</button>
+            <button class="choice" type="button" data-g="children" data-v="3" aria-pressed="false">プレママ！</button>
+            <button class="choice" type="button" data-g="children" data-v="4" aria-pressed="false">まだ未成年</button>
+          </div>
+        </div>
 
         <div class="question">
           <span class="question-title">✧ 犬派？猫派？</span>
@@ -277,7 +286,7 @@
       y.appendChild(o);
     }
 
-    const a = { g: null, p: null, r: null };
+    const a = { g: null, p: null, r: null, children: null };
 
     document.querySelectorAll("[data-g]").forEach(b => {
       b.addEventListener("click", () => {
@@ -312,16 +321,17 @@
         alert("おやくそくを選んでね♡");
         return;
       }
+            if (!a.children) {
+        alert("お子さんについて選んでね♡");
+        return;
+      }
 
       const v = y.value;
+      const z = Number(v);
 
-      if (v !== "old") {
-        const z = Number(v);
-
-        if (z >= 1990 && z <= 1999) {
-          window.location.href = "index.html";
-          return;
-        }
+      if (z >= 1990 && z <= 1999 && a.children === "1") {
+        window.location.href = "index.html";
+        return;
       }
 
       window.location.href = "popbbs.html";
