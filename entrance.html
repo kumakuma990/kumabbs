@@ -360,20 +360,26 @@
     }
 
 
+
 if (a.r === "0") {
   f.style.display = "none";
-  m.style.display = "block";
 
-  m.innerHTML = `
+  const titleArea = document.querySelector(".title-area");
+  titleArea.innerHTML = `
     <img
       src="images/usagi/chappy-peko.png"
       alt="チャッピー"
-      style="width:120px; height:auto; display:block; margin:0 auto 12px;"
+      style="width:100px; height:100px; object-fit:contain;"
     >
+  `;
+
+  m.innerHTML = `
     <h2>Bye-bye！</h2>
     <p>遊びに来てくれてありがとう！</p>
     <button class="choice" id="back" type="button">サイトを出る</button>
   `;
+
+  m.style.display = "block";
 
   document.getElementById("back").addEventListener("click", () => {
     if (window.history.length > 1) {
@@ -390,6 +396,7 @@ if (a.r === "0") {
 
   return;
 }
+
 
     if (a.r !== "1") {
       alert("おやくそくを選んでね♡");
