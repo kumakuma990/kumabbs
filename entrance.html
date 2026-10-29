@@ -1,355 +1,144 @@
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>えんとらんす</title>
-  <style>
-    * { box-sizing: border-box; }
+<script>
+  const y = document.getElementById("birth-year");
+  const n = new Date().getFullYear();
+  const STORAGE_KEY = "kumabbs_entry_answers";
 
-    body {
-      margin: 0;
-      padding: 24px 14px 40px;
-      background: #FFF0F5;
-      color: #8D536B;
-      font-family: "Yu Gothic", Meiryo, sans-serif;
-      line-height: 1.8;
+  for (let i = n; i >= 1970; i--) {
+    const o = document.createElement("option");
+    o.value = String(i);
+    o.textContent = i + "年";
+    y.appendChild(o);
+  }
+
+  const a = {
+    g: null,
+    p: null,
+    r: null,
+    children: null
+  };
+
+  const f = document.getElementById("entry-form");
+  const m = document.getElementById("message");
+
+  function goToBoard(answers) {
+    const year = Number(answers.year);
+
+    if (
+      year >= 1985 &&
+      year <= 1999 &&
+      answers.children === "1"
+    ) {
+      window.location.href = "index.html";
+    } else {
+      window.location.href = "popbbs.html";
+    }
+  }
+
+  // 保存済みの回答があれば、質問を表示せず自動で移動
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved) {
+      const answers = JSON.parse(saved);
+
+      if (
+        answers &&
+        answers.r === "1" &&
+        answers.year &&
+        answers.g &&
+        answers.p &&
+        answers.children
+      ) {
+        goToBoard(answers);
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  } catch (error) {
+    console.log("保存した回答を読み込めませんでした。");
+  }
+
+  document.querySelectorAll("[data-g]").forEach(b => {
+    b.addEventListener("click", () => {
+      const k = b.dataset.g;
+      a[k] = b.dataset.v;
+
+      document.querySelectorAll('[data-g="' + k + '"]')
+        .forEach(c => {
+          c.setAttribute(
+            "aria-pressed",
+            c === b ? "true" : "false"
+          );
+        });
+    });
+  });
+
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+
+    if (!y.value) {
+      alert("生まれ年を選んでね♡");
+      y.focus();
+      return;
     }
 
-    button, select { font: inherit; }
-
-    .page {
-      max-width: 560px;
-      margin: auto;
+    if (a.r === "0") {
+      f.style.display = "none";
+      m.style.display = "block";
+      return;
     }
 
-    .decoration {
-      text-align: center;
-      color: #D987A8;
-      letter-spacing: 5px;
-      margin: 8px 0;
+    if (a.r !== "1") {
+      alert("おやくそくを選んでね♡");
+      return;
     }
 
-    .card {
-      background: #FFF;
-      border: 2px solid #F5D5E2;
-      border-radius: 22px;
-      padding: 26px 20px;
-      box-shadow: 0 7px 0 #F6DDE7;
-    }
-.title-area {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.title-bunny2 {
-  position: absolute;
-  left: 24px;
-  width: 64px;
-  height: 74px;
-  object-fit: contain;
-}
-    
-.title-bunny {
-  position: absolute;
-  right: 24px;
-  width: 64px;
-  height: 74px;
-  object-fit: contain;
-}
-
-.title-text {
-  min-width: 0;
-  text-align: center;
-}
-
-.title-text h1 {
-  font-size: 18px;
-  letter-spacing: 1px;
-  text-align: center;
-}
-
-.title-text .subtitle {
-  font-size: 13px;
-  text-align: center;
-  margin: 4px 0 0;
-}
-    h1 {
-      margin: 0;
-      text-align: center;
-      font-size: 30px;
-      color: #D77FA1;
-      letter-spacing: 2px;
+    if (!a.children) {
+      alert("お子さんについて選んでね♡");
+      return;
     }
 
-    .subtitle {
-      text-align: center;
-      margin: 4px 0 24px;
-      color: #B77B94;
+    if (!a.g) {
+      alert("性別を選んでね♡");
+      return;
     }
 
-    .mascot {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 14px;
-      border: 2px dashed #EFC4D5;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #D99AB3;
-      background: #FFF8FB;
-      font-size: 13px;
-      text-align: center;
+    if (!a.p) {
+      alert("犬派か猫派か選んでね♡");
+      return;
     }
 
-    .question { margin: 22px 0; }
+    const answers = {
+      year: y.value,
+      g: a.g,
+      p: a.p,
+      r: a.r,
+      children: a.children
+    };
 
-    .question-title {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 9px;
-      color: #B96588;
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(answers)
+      );
+    } catch (error) {
+      console.log("回答を保存できませんでした。");
     }
 
-    select {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #EBC5D5;
-      border-radius: 12px;
-      background: #FFF8FB;
-      color: #8D536B;
-    }
+    goToBoard(answers);
+  });
 
-    .choices {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .choice {
-      flex: 1 1 auto;
-      min-width: 90px;
-      padding: 9px 12px;
-      border: 1px solid #EBC5D5;
-      border-radius: 14px;
-      background: #FFF;
-      color: #A65F7D;
-      cursor: pointer;
-    }
-
-    .choice[aria-pressed="true"] {
-      background: #F6C9DB;
-      border-color: #E49AB8;
-      color: #79415A;
-      font-weight: bold;
-    }
-
-    .rule {
-      padding: 15px;
-      background: #FFF5F9;
-      border: 1px solid #F4D8E4;
-      border-radius: 14px;
-      text-align: center;
-    }
-
-    .rule p { margin: 0 0 12px; font-weight: bold; }
-
-    .enter {
-      width: 100%;
-      margin-top: 24px;
-      padding: 13px;
-      border: none;
-      border-radius: 999px;
-      background: #E99BB9;
-      color: #FFF;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #D77FA1;
-    }
-
-    .message {
-      display: none;
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 14px;
-      background: #FFF5F9;
-      text-align: center;
-    }
-
-    .message h2 { color: #D77FA1; }
-
-    .footer {
-      text-align: center;
-      font-size: 12px;
-      color: #B98BA0;
-      margin-top: 24px;
-    }
-
-    @media (max-width: 380px) {
-      .card { padding: 22px 14px; }
-      h1 { font-size: 26px; }
-      .choice { min-width: 75px; padding: 8px; }
-    }
-  </style>
-</head>
-<body>
-  <main class="page">
-    <div class="decoration">♡ 　 ♡ 　 ♡</div>
-
-    <section class="card">
-<div class="title-area">
-   <img src="images/usagi/base.png" alt="うさぎちゃん" class="title-bunny2">
-  <div class="title-text">
-    <h1>♡ あてんしょん ♡</h1>
-    <p class="subtitle">簡単なアンケートのお願い♡</p>
-  </div>
-  <img src="images/usagi/base.png" alt="うさぎちゃん" class="title-bunny">
-</div>
-
-      <form id="entry-form">
-        <div class="question">
-          <label class="question-title" for="birth-year">
-            ✧ 生まれ年は？
-          </label>
-          <select id="birth-year" required>
-            <option value="">選んでね♡</option>
-            <option value="old">1960年代以前</option>
-          </select>
-        </div>
-
-        <div class="question">
-          <span class="question-title">✧ 性別は？</span>
-          <div class="choices">
-            <button class="choice" type="button" data-g="g" data-v="1" aria-pressed="false">女の子</button>
-            <button class="choice" type="button" data-g="g" data-v="2" aria-pressed="false">男の子</button>
-            <button class="choice" type="button" data-g="g" data-v="3" aria-pressed="false">その他</button>
-            <button class="choice" type="button" data-g="g" data-v="4" aria-pressed="false">答えない</button>
-          </div>
-        </div>
-                <div class="question">
-          <span class="question-title">✧ お子さんはいる？</span>
-          <div class="choices">
-            <button class="choice" type="button" data-g="children" data-v="1" aria-pressed="false">いない！</button>
-            <button class="choice" type="button" data-g="children" data-v="2" aria-pressed="false">いる！</button>
-            <button class="choice" type="button" data-g="children" data-v="3" aria-pressed="false">プレママ！</button>
-            <button class="choice" type="button" data-g="children" data-v="4" aria-pressed="false">まだ未成年</button>
-          </div>
-        </div>
-
-        <div class="question">
-          <span class="question-title">✧ 犬派？猫派？</span>
-          <div class="choices">
-            <button class="choice" type="button" data-g="p" data-v="1" aria-pressed="false">犬派</button>
-            <button class="choice" type="button" data-g="p" data-v="2" aria-pressed="false">猫派</button>
-            <button class="choice" type="button" data-g="p" data-v="3" aria-pressed="false">どっちも！</button>
-          </div>
-        </div>
-
-        <div class="question">
-          <span class="question-title">✧ おやくそく！</span>
-          <div class="rule">
-            <p>荒らし・迷惑行為は禁止だょ！</p>
-            <div class="choices">
-              <button class="choice" type="button" data-g="r" data-v="1" aria-pressed="false">はーい！</button>
-              <button class="choice" type="button" data-g="r" data-v="0" aria-pressed="false">同意しない</button>
-            </div>
-          </div>
-        </div>
-
-        <button class="enter" type="submit">♡ すすむ ♡</button>
-      </form>
-
-      <div class="message" id="message" role="status" aria-live="polite">
+  document.getElementById("back").addEventListener("click", () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      m.innerHTML = `
         <h2>Bye-bye！</h2>
         <p>遊びに来てくれてありがとう！</p>
-        <button class="choice" id="back" type="button">サイトを出る</button>
-      </div>
-    </section>
-
-    <div class="footer">♡ かわいい時間をすごしてね ♡</div>
-  </main>
-
-  <script>
-    const y = document.getElementById("birth-year");
-    const n = new Date().getFullYear();
-
-    for (let i = n; i >= 1970; i--) {
-      const o = document.createElement("option");
-      o.value = String(i);
-      o.textContent = i + "年";
-      y.appendChild(o);
+        <p>このページはボタンから閉じられないことがあるよ。
+        ブラウザのタブを閉じてね♡</p>
+      `;
     }
-
-    const a = { g: null, p: null, r: null, children: null };
-
-    document.querySelectorAll("[data-g]").forEach(b => {
-      b.addEventListener("click", () => {
-        const k = b.dataset.g;
-        a[k] = b.dataset.v;
-
-        document.querySelectorAll('[data-g="' + k + '"]').forEach(c => {
-          c.setAttribute("aria-pressed", c === b ? "true" : "false");
-        });
-      });
-    });
-
-    const f = document.getElementById("entry-form");
-    const m = document.getElementById("message");
-
-    f.addEventListener("submit", e => {
-      e.preventDefault();
-
-      if (!y.value) {
-        alert("生まれ年を選んでね♡");
-        y.focus();
-        return;
-      }
-
-      if (a.r === "0") {
-        f.style.display = "none";
-        m.style.display = "block";
-        return;
-      }
-
-      if (a.r !== "1") {
-        alert("おやくそくを選んでね♡");
-        return;
-      }
-            if (!a.children) {
-        alert("お子さんについて選んでね♡");
-        return;
-      }
-
-      const v = y.value;
-      const z = Number(v);
-
-      if (z >= 1985 && z <= 1999 && a.children === "1") {
-        window.location.href = "index.html";
-        return;
-      }
-
-      window.location.href = "popbbs.html";
-    });
-
-    document.getElementById("back").addEventListener("click", () => {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    m.innerHTML = `
-      <h2>Bye-bye！</h2>
-      <p>遊びに来てくれてありがとう！</p>
-      <p>このページはボタンから閉じられないことがあるよ。
-      ブラウザのタブを閉じてね♡</p>
-    `;
-  }
-});
-  </script>
-</body>
-</html>
-
+  });
+</script>
