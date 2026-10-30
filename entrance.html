@@ -199,13 +199,30 @@
 </head>
 <body>
   <main class="page">
-<div class="decoration">♡ ♡ ♡ ♡ ♡</div>
+<div class="decoration">♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡</div>
 
 <div style="text-align:center; margin:12px 0 18px;">
- あなたは <script src="https://www.stats4u.net/s4u.js" data-id="5148281005" data-style="950" data-params="form=zlpunkt&c1=ff94bd&c2=f7a6c5" async></script>人目の訪問者
+ あなたは  <script>
+    const counterKey = "kumabbs_counter_last_visit";
+    const lastVisit = Number(localStorage.getItem(counterKey) || 0);
+    const now = Date.now();
+
+    if (now - lastVisit >= 24 * 60 * 60 * 1000) {
+      localStorage.setItem(counterKey, now);
+
+      const counterScript = document.createElement("script");
+      counterScript.src = "https://www.stats4u.net/s4u.js";
+      counterScript.dataset.id = "5148281005";
+      counterScript.dataset.style = "950";
+      counterScript.dataset.params = "form=zlpunkt&c1=ff94bd&c2=f7a6c5";
+      counterScript.async = true;
+
+      document.currentScript.parentElement.appendChild(counterScript);
+    }
+  </script>人目の訪問者です
 </div>
 
-<div class="decoration">♡ ♡ ♡ ♡ ♡</div>
+<div class="decoration">♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡</div>
 
 <section class="card">
 <div class="title-area">
